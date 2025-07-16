@@ -121,6 +121,33 @@ export default function RootLayout({
         <meta name="geo.placename" content="France" />
         <meta name="ICBM" content="46.603354, 1.888334" />
         <meta name="theme-color" content="#0ea5e9" />
+        {/* Favicon & icons */}
+        <link rel="icon" href="/icon/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/icon/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/icon/favicon-16x16.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/icon/apple-touch-icon.png"
+        />
+        <link rel="manifest" href="/icon/site.webmanifest" />
+        <link
+          rel="mask-icon"
+          href="/icon/safari-pinned-tab.svg"
+          color="#0ea5e9"
+        />
+        <meta name="msapplication-TileColor" content="#0ea5e9" />
+        <meta name="msapplication-config" content="/icon/browserconfig.xml" />
       </head>
       <body className="font-inter antialiased">
         <StructuredData />
