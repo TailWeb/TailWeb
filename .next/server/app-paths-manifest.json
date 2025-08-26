@@ -1,16 +1,6 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/contact/route": "app/api/contact/route.js",
-  "/api/not-found/route": "app/api/not-found/route.js",
-  "/robots.txt/route": "app/robots.txt/route.js",
-  "/sitemap.xml/route": "app/sitemap.xml/route.js",
-  "/a-propos/page": "app/a-propos/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/competences/page": "app/competences/page.js",
-  "/forfaits/page": "app/forfaits/page.js",
-  "/realisations/page": "app/realisations/page.js",
   "/page": "app/page.js",
-  "/mentions-legales/page": "app/mentions-legales/page.js",
-  "/politique-confidentialite/page": "app/politique-confidentialite/page.js"
+  "/forfaits/page": "app/forfaits/page.js",
+  "/a-propos/page": "app/a-propos/page.js"
 }

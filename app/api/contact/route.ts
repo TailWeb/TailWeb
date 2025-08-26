@@ -8,12 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 const smtpConfig = {
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // TLS
+  host: process.env.SMTP_HOST || "smtp.gmail.com",
+  port: parseInt(process.env.SMTP_PORT || "587"),
+  secure: process.env.SMTP_SECURE === "true",
   auth: {
-    user: "tailweb.contact@gmail.com",
-    pass: "uoqb ufwq kspv ybyb",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 };
 
@@ -88,8 +88,8 @@ export async function POST(request: NextRequest) {
     // ENVOI EMAIL VIA GMAIL SMTP
     const transporter = nodemailer.createTransport(smtpConfig);
     const mailOptions = {
-      from: "Contact TailWeb <tailweb.contact@gmail.com>",
-      to: "tailweb.contact@gmail.com",
+      from: `Contact TailWeb <${process.env.SMTP_USER}>`,
+      to: process.env.CONTACT_EMAIL,
       replyTo: sanitizedData.email,
       subject: sanitizedData.subject || "Nouveau message de contact",
       text: `Nom: ${sanitizedData.name}\nEmail: ${sanitizedData.email}\n\n${sanitizedData.message}`,

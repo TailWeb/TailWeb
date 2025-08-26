@@ -193,11 +193,9 @@
   .service-card-hover::before {
     content: "";
     @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      transparent 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 100%);
   }
 
   .project-card-hover {
@@ -213,11 +211,9 @@
   .pricing-card-hover::before {
     content: "";
     @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl;
-    background: linear-gradient(
-      135deg,
-      rgba(14, 165, 233, 0.03) 0%,
-      rgba(34, 197, 94, 0.03) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(14, 165, 233, 0.03) 0%,
+        rgba(34, 197, 94, 0.03) 100%);
   }
 
   .stat-card-hover {
@@ -228,11 +224,9 @@
   .stat-card-hover::before {
     content: "";
     @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      transparent 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 100%);
   }
 
   .subtle-hover {
@@ -312,6 +306,7 @@
     opacity: 0;
     transform: scale(0.9) translateY(10px) translateZ(0);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0) translateZ(0);
@@ -319,10 +314,12 @@
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0px) translateZ(0);
   }
+
   50% {
     transform: translateY(-20px) translateZ(0);
   }
@@ -332,16 +329,19 @@
   0% {
     transform: translateX(-100%) translateZ(0);
   }
+
   100% {
     transform: translateX(100%) translateZ(0);
   }
 }
 
 @keyframes pulseGlow {
+
   0%,
   100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
   }
+
   50% {
     box-shadow:
       0 0 20px rgba(59, 130, 246, 0.6),
@@ -354,17 +354,20 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .animate-fade-in-up {
   animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* Optimisations d'accessibilité */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -390,7 +393,9 @@
 }
 
 /* Optimisations pour les écrans haute résolution */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
   .text-gradient,
   .text-gradient2 {
     -webkit-background-clip: text;
@@ -433,6 +438,7 @@
 
 /* Optimisations pour les connexions lentes */
 @media (prefers-reduced-data: reduce) {
+
   .hero-button-primary::before,
   .hero-button-primary::after,
   .hero-button-secondary::before,
