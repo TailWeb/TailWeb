@@ -4,18 +4,18 @@ import {
   sanitizeInput,
   validateContactForm,
 } from "@/lib/security";
+import FormData from "form-data";
+import Mailgun from "mailgun.js";
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
-const smtpConfig = {
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-};
+const mailgun = new Mailgun(FormData);
+const client = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY || "",
+  url: process.env.MAILGUN_HOST
+    ? `https://${process.env.MAILGUN_HOST}`
+    : undefined,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -85,23 +85,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ENVOI EMAIL VIA GMAIL SMTP
-    const transporter = nodemailer.createTransport(smtpConfig);
-    const mailOptions = {
-      from: `Contact TailWeb <${process.env.SMTP_USER}>`,
-      to: process.env.CONTACT_EMAIL,
-      replyTo: sanitizedData.email,
-      subject: sanitizedData.subject || "Nouveau message de contact",
-      text: `Nom: ${sanitizedData.name}\nEmail: ${sanitizedData.email}\n\n${sanitizedData.message}`,
-      html: `<p><strong>Nom:</strong> ${sanitizedData.name}</p><p><strong>Email:</strong> ${sanitizedData.email}</p><p><strong>Message:</strong><br/>${sanitizedData.message.replace(/\n/g, "<br/>")}</p>`,
-    };
-
+    // ENVOI EMAIL VIA MAILGUN
     try {
-      await transporter.sendMail(mailOptions);
-    } catch (mailError) {
+      const DOMAIN = process.env.MAILGUN_DOMAIN || "";
+      const messageData = {
+        from: `TailWeb Contact <noreply@${DOMAIN}>`,
+        to: process.env.CONTACT_EMAIL ? [process.env.CONTACT_EMAIL] : [],
+        "h:Reply-To": sanitizedData.email,
+        subject: sanitizedData.subject || "Nouveau message de contact",
+        text: `Nom: ${sanitizedData.name}\nEmail: ${sanitizedData.email}\n\n${sanitizedData.message}`,
+        html: `<p><strong>Nom:</strong> ${
+          sanitizedData.name
+        }</p><p><strong>Email:</strong> ${
+          sanitizedData.email
+        }</p><p><strong>Message:</strong><br/>${sanitizedData.message.replace(
+          /\n/g,
+          "<br/>"
+        )}</p>`,
+      };
+
+      await client.messages.create(DOMAIN, messageData);
+
+      logSecurityEvent(
+        "contact_form",
+        `Nouveau message de ${sanitizedData.name} (${sanitizedData.email}) envoyé avec succès via Mailgun`,
+        ipAddress
+      );
+    } catch (mailError: any) {
       logSecurityEvent(
         "suspicious_activity",
-        `Erreur SMTP: ${mailError.message || mailError}`,
+        `Erreur Mailgun: ${mailError.message || mailError}`,
         ipAddress
       );
       return NextResponse.json(
@@ -112,12 +125,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    logSecurityEvent(
-      "contact_form",
-      `Nouveau message de ${sanitizedData.name} (${sanitizedData.email}) envoyé avec succès via SMTP`,
-      ipAddress
-    );
 
     return NextResponse.json(
       {
