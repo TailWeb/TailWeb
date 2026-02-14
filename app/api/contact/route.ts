@@ -8,15 +8,6 @@ import FormData from "form-data";
 import Mailgun from "mailgun.js";
 import { NextRequest, NextResponse } from "next/server";
 
-const mailgun = new Mailgun(FormData);
-const client = mailgun.client({
-  username: "api",
-  key: process.env.MAILGUN_API_KEY || "",
-  url: process.env.MAILGUN_HOST
-    ? `https://${process.env.MAILGUN_HOST}`
-    : undefined,
-});
-
 export async function POST(request: NextRequest) {
   try {
     const ipAddress =
@@ -87,6 +78,15 @@ export async function POST(request: NextRequest) {
 
     // ENVOI EMAIL VIA MAILGUN
     try {
+      const mailgun = new Mailgun(FormData);
+      const client = mailgun.client({
+        username: "api",
+        key: process.env.MAILGUN_API_KEY || "dummy-key-for-build",
+        url: process.env.MAILGUN_HOST
+          ? `https://${process.env.MAILGUN_HOST}`
+          : undefined,
+      });
+
       const DOMAIN = process.env.MAILGUN_DOMAIN || "";
       const messageData = {
         from: `TailWeb Contact <noreply@${DOMAIN}>`,
