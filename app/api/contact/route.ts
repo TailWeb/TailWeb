@@ -111,10 +111,12 @@ export async function POST(request: NextRequest) {
         `Nouveau message de ${sanitizedData.name} (${sanitizedData.email}) envoyé avec succès via Mailgun`,
         ipAddress
       );
-    } catch (mailError: any) {
+    } catch (mailError) {
       logSecurityEvent(
         "suspicious_activity",
-        `Erreur Mailgun: ${mailError.message || mailError}`,
+        `Erreur Mailgun: ${
+          mailError instanceof Error ? mailError.message : String(mailError)
+        }`,
         ipAddress
       );
       return NextResponse.json(
@@ -140,13 +142,15 @@ export async function POST(request: NextRequest) {
         },
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
     console.error("Erreur API contact:", error);
 
     logSecurityEvent(
       "suspicious_activity",
-      `Erreur serveur dans contact: ${error.message}`,
+      `Erreur serveur dans contact: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
       ipAddress
     );
 
